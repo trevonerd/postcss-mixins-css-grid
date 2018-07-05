@@ -1,0 +1,22 @@
+{
+  "name": "postcss-mixins-collection",
+  "version": "1.0.0",
+  "description": "A collection of JS mixins for the PostCSS Mixins plugin",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib"
+  },
+  "keywords": [
+    "postcss",
+    "mixins",
+    "collection"
+  ],
+  "author": "Marco Trevisani <marco.trevisani81@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1"
+  },
+  "dependencies": {}
+}

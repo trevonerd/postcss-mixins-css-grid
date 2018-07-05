@@ -1,0 +1,8 @@
+{
+    "presets": [["env", { "targets": { "node": "current" } }], "stage-0"],
+    "env": {
+        "production": {
+            "ignore": ["__tests__", "__mocks__"]
+        }
+    }
+}
