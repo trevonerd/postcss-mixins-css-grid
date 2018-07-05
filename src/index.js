@@ -1,6 +1,6 @@
 import { colSpan, colStart, customConfig, generateGrid } from './grids';
 
-const mixins = function(config) {
+export default function(config) {
     if (config) customConfig(config);
 
     return {
@@ -8,6 +8,4 @@ const mixins = function(config) {
         'col-start': colStart,
         'col-span': colSpan
     };
-};
-
-export { mixins };
+}

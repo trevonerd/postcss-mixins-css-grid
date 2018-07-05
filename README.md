@@ -1,5 +1,6 @@
-# PostCSS Mixins Collection
+# PostCSS Mixins CSS Grid
 
- A collection of JS mixins for the PostCSS Mixins plugin.
+A CSS Grid mixin for the PostCSS Mixins plugin. The easiest way to implement a responsive grid system using CSS Grid.
 
-- CSS-Grid System
+---
+*documentation coming soon...*
