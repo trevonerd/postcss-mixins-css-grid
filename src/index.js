@@ -1,4 +1,4 @@
-import { colSpan, colStart, customConfig, generateGrid } from './grids';
+import { colSpan, colStart, customConfig, generateGrid, spanAll } from './grids';
 
 export default function(config) {
     if (config) customConfig(config);
@@ -6,6 +6,7 @@ export default function(config) {
     return {
         grid: generateGrid,
         'col-start': colStart,
-        'col-span': colSpan
+        'col-span': colSpan,
+        'span-all': spanAll
     };
 }
