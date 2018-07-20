@@ -14,31 +14,35 @@ let grid = {
         8: 'repeat(8, 1fr)',
         12: 'repeat(12, 1fr)',
         24: 'repeat(24, 1fr)'
+    },
+    templates: {
+        default: '@mobile 8 @tablet 12 @desktop 24 @large-desktop 24'
     }
 };
 
-const customConfig = conf => {
+const customConfig = (conf) => {
     grid = {
         gaps: { ...grid.gaps, ...conf.grid.gaps },
-        presets: { ...grid.presets, ...conf.grid.presets }
+        presets: { ...grid.presets, ...conf.grid.presets },
+        templates: { ...grid.templates, ...conf.grid.templates }
     };
 };
 
-const getColumns = cols => {
+const getColumns = (cols) => {
     if (grid.presets[cols]) {
         return grid.presets[cols];
     }
 
     const matches = cols.match(/[\w]+/g);
     let gridTemplate = '';
-    matches.forEach(col => {
+    matches.forEach((col) => {
         gridTemplate += col + 'fr ';
     });
 
     return gridTemplate;
 };
 
-const getCssResponsiveValues = responsiveData => {
+const getCssResponsiveValues = (responsiveData) => {
     const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
     let values = [];
     let m;
@@ -59,7 +63,7 @@ const getCssResponsiveValues = responsiveData => {
 const colSpan = (ignore, colsResponsiveSpan) => {
     let responsiveSpanCss = {};
 
-    getCssResponsiveValues(colsResponsiveSpan).forEach(step => {
+    getCssResponsiveValues(colsResponsiveSpan).forEach((step) => {
         responsiveSpanCss[step[2]] = {
             'grid-column-end': `span ${step[1]}`
         };
@@ -73,7 +77,7 @@ const colSpan = (ignore, colsResponsiveSpan) => {
 const colStart = (ignore, colsResponsiveStart) => {
     let responsiveStartCss = {};
 
-    getCssResponsiveValues(colsResponsiveStart).forEach(step => {
+    getCssResponsiveValues(colsResponsiveStart).forEach((step) => {
         responsiveStartCss[step[2]] = {
             'grid-column-start': step[1]
         };
@@ -85,9 +89,11 @@ const colStart = (ignore, colsResponsiveStart) => {
 };
 
 const generateGrid = (ignore, responsiveGrids) => {
+    if (responsiveGrids.startsWith('@')) generateGrid('', grid.templates[responsiveGrids]);
+
     let responsiveGridsCss = new Object();
 
-    getCssResponsiveValues(responsiveGrids).forEach(step => {
+    getCssResponsiveValues(responsiveGrids).forEach((step) => {
         responsiveGridsCss[step[2]] = {
             'grid-template-columns': getColumns(step[1]),
             'grid-gap': grid.gaps[step[0]]
@@ -106,4 +112,10 @@ const generateGrid = (ignore, responsiveGrids) => {
     };
 };
 
-export { customConfig, generateGrid, colStart, colSpan };
+const spanAll = (ignore) => {
+    return {
+        'grid-column': '1/-1'
+    };
+};
+
+export { customConfig, generateGrid, colStart, colSpan, spanAll };
