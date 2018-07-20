@@ -89,7 +89,7 @@ const colStart = (ignore, colsResponsiveStart) => {
 };
 
 const generateGrid = (ignore, responsiveGrids) => {
-    if (responsiveGrids.startsWith('@')) generateGrid('', grid.templates[responsiveGrids]);
+    if (!responsiveGrids.startsWith('@')) return generateGrid('', grid.templates[responsiveGrids]);
 
     let responsiveGridsCss = new Object();
 
