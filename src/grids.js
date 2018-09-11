@@ -17,14 +17,16 @@ let grid = {
     },
     templates: {
         default: '@mobile 8 @tablet 12 @desktop 24 @large-desktop 24'
-    }
+    },
+    parser: 'css'
 };
 
 const customConfig = (conf) => {
     grid = {
         gaps: { ...grid.gaps, ...conf.grid.gaps },
         presets: { ...grid.presets, ...conf.grid.presets },
-        templates: { ...grid.templates, ...conf.grid.templates }
+        templates: { ...grid.templates, ...conf.grid.templates },
+        parser: conf.parser
     };
 };
 
@@ -42,6 +44,11 @@ const getColumns = (cols) => {
     return gridTemplate;
 };
 
+const parseMediaQueryProp = (prop) => {
+    if (grid.parser === 'sass') return `$${prop}`;
+    return `(--${prop})`;
+};
+
 const getCssResponsiveValues = (responsiveData) => {
     const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
     let values = [];
@@ -51,7 +58,7 @@ const getCssResponsiveValues = (responsiveData) => {
         let cssProp = '&';
 
         if (m[1] !== 'mobile') {
-            cssProp = `@media (--${m[1]})`;
+            cssProp = `@media ${parseMediaQueryProp(m[1])}`;
         }
 
         values.push([m[1], m[2], cssProp]);
