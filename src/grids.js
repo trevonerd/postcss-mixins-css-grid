@@ -110,7 +110,6 @@ const generateGrid = (ignore, responsiveGrids) => {
     responsiveGridsCss['&'] = {
         ...responsiveGridsCss['&'],
         display: 'grid',
-        margin: '0 auto',
         width: '100%'
     };
 
