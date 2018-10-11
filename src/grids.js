@@ -16,43 +16,44 @@ let grid = {
         24: 'repeat(24, 1fr)'
     },
     templates: {
-        default: '@mobile 8 @tablet 12 @desktop 24 @large-desktop 24'
+        default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24'
     },
     parser: 'css'
 };
 
-const customConfig = (conf) => {
+const customConfig = conf => {
     grid = {
-        gaps: { ...grid.gaps, ...conf.grid.gaps },
-        presets: { ...grid.presets, ...conf.grid.presets },
-        templates: { ...grid.templates, ...conf.grid.templates },
+        gaps: {...grid.gaps, ...conf.grid.gaps},
+        presets: {...grid.presets, ...conf.grid.presets},
+        templates: {...grid.templates, ...conf.grid.templates},
         parser: conf.parser
     };
 };
 
-const getColumns = (cols) => {
+const getColumns = cols => {
     if (grid.presets[cols]) {
         return grid.presets[cols];
     }
 
     const matches = cols.match(/[\w]+/g);
     let gridTemplate = '';
-    matches.forEach((col) => {
+    matches.forEach(col => {
         gridTemplate += col + 'fr ';
     });
 
     return gridTemplate;
 };
 
-const parseMediaQueryProp = (prop) => {
+const parseMediaQueryProp = prop => {
     if (grid.parser === 'sass') return `$${prop}`;
     return `(--${prop})`;
 };
 
-const getCssResponsiveValues = (responsiveData) => {
+const getCssResponsiveValues = responsiveData => {
     const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
     let values = [];
     let m;
+    let addDisplayGridCss = true;
 
     while ((m = regex.exec(responsiveData)) !== null) {
         let cssProp = '&';
@@ -61,7 +62,8 @@ const getCssResponsiveValues = (responsiveData) => {
             cssProp = `@media ${parseMediaQueryProp(m[1])}`;
         }
 
-        values.push([m[1], m[2], cssProp]);
+        values.push([m[1], m[2], cssProp, addDisplayGridCss]);
+        addDisplayGridCss = false;
     }
 
     return values;
@@ -70,7 +72,7 @@ const getCssResponsiveValues = (responsiveData) => {
 const colSpan = (ignore, colsResponsiveSpan) => {
     let responsiveSpanCss = {};
 
-    getCssResponsiveValues(colsResponsiveSpan).forEach((step) => {
+    getCssResponsiveValues(colsResponsiveSpan).forEach(step => {
         responsiveSpanCss[step[2]] = {
             'grid-column-end': `span ${step[1]}`
         };
@@ -84,7 +86,7 @@ const colSpan = (ignore, colsResponsiveSpan) => {
 const colStart = (ignore, colsResponsiveStart) => {
     let responsiveStartCss = {};
 
-    getCssResponsiveValues(colsResponsiveStart).forEach((step) => {
+    getCssResponsiveValues(colsResponsiveStart).forEach(step => {
         responsiveStartCss[step[2]] = {
             'grid-column-start': step[1]
         };
@@ -96,32 +98,35 @@ const colStart = (ignore, colsResponsiveStart) => {
 };
 
 const generateGrid = (ignore, responsiveGrids) => {
-    if (!responsiveGrids.startsWith('@')) return generateGrid('', grid.templates[responsiveGrids]);
+    if (!responsiveGrids.startsWith('@'))
+        return generateGrid('', grid.templates[responsiveGrids]);
 
     let responsiveGridsCss = new Object();
 
-    getCssResponsiveValues(responsiveGrids).forEach((step) => {
+    getCssResponsiveValues(responsiveGrids).forEach(step => {
         responsiveGridsCss[step[2]] = {
             'grid-template-columns': getColumns(step[1]),
             'grid-gap': grid.gaps[step[0]]
         };
-    });
 
-    responsiveGridsCss['&'] = {
-        ...responsiveGridsCss['&'],
-        display: 'grid',
-        width: '100%'
-    };
+        if (step[3]) {
+            responsiveGridsCss[step[2]] = {
+                ...responsiveGridsCss[step[2]],
+                display: 'grid',
+                width: '100%'
+            };
+        }
+    });
 
     return {
         ...responsiveGridsCss
     };
 };
 
-const spanAll = (ignore) => {
+const spanAll = ignore => {
     return {
         'grid-column': '1/-1'
     };
 };
 
-export { customConfig, generateGrid, colStart, colSpan, spanAll };
+export {customConfig, generateGrid, colStart, colSpan, spanAll};
