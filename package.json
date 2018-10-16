@@ -1,31 +1,30 @@
 {
-  "name": "postcss-mixins-css-grid",
-  "version": "1.1.0",
-  "description": "A CSS Grid mixin for the PostCSS Mixins plugin.",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "babel src -d lib",
-    "test": "jest"
-  },
-  "keywords": [
-    "postcss",
-    "mixins",
-    "collection"
-  ],
-  "author": "Marco Trevisani <marco.trevisani81@gmail.com>",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/trevonerd/postcss-mixins-css-grid"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^23.6.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "jest": "^23.6.0",
-    "regenerator-runtime": "^0.12.1"
-  },
-  "dependencies": {}
+    "name": "postcss-mixins-css-grid",
+    "version": "2.0.0",
+    "description": "A CSS Grid mixin for the PostCSS Mixins plugin.",
+    "main": "lib/index.js",
+    "scripts": {
+        "build": "babel src -d lib",
+        "test": "jest"
+    },
+    "keywords": [
+        "postcss",
+        "mixins",
+        "collection"
+    ],
+    "author": "Marco Trevisani <marco.trevisani81@gmail.com>",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/trevonerd/postcss-mixins-css-grid"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.3",
+        "babel-jest": "^23.6.0",
+        "babel-preset-env": "^1.7.0",
+        "babel-preset-stage-0": "^6.24.1",
+        "jest": "^23.6.0",
+        "regenerator-runtime": "^0.12.1"
+    }
 }
