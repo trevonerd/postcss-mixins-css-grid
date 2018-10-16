@@ -1,3 +1,5 @@
+import ie11Fallback from './modules/ie11Fallback.js';
+
 let grid = {
     gaps: {
         mobile: '5px',
@@ -18,19 +20,28 @@ let grid = {
     templates: {
         default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24'
     },
-    parser: 'css'
+    parser: 'css',
+    ie11: false
 };
 
 const customConfig = conf => {
+    if (conf.grid) {
+        grid = {
+            gaps: {...grid.gaps, ...conf.grid.gaps},
+            presets: {...grid.presets, ...conf.grid.presets},
+            templates: {...grid.templates, ...conf.grid.templates}
+        };
+    }
     grid = {
-        gaps: {...grid.gaps, ...conf.grid.gaps},
-        presets: {...grid.presets, ...conf.grid.presets},
-        templates: {...grid.templates, ...conf.grid.templates},
-        parser: conf.parser
+        ...grid,
+        parser: conf.parser !== undefined ? conf.parser : grid.parser,
+        ie11: conf.ie11 !== undefined ? conf.ie11 : grid.ie11
     };
 };
 
 const getColumns = cols => {
+    if (!cols) throw 'cols is empty or invalid!';
+
     if (grid.presets[cols]) {
         return grid.presets[cols];
     }
@@ -41,40 +52,49 @@ const getColumns = cols => {
         gridTemplate += col + 'fr ';
     });
 
-    return gridTemplate;
+    return gridTemplate.trim();
 };
 
 const parseMediaQueryProp = prop => {
+    if (!prop) throw 'prop is undefined!';
+
     if (grid.parser === 'sass') return `$${prop}`;
     return `(--${prop})`;
 };
 
-const getCssResponsiveValues = responsiveData => {
+const getCssResponsiveSteps = responsiveData => {
     const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
-    let values = [];
-    let m;
+    let responsiveSteps = [];
+    let regexGroups;
     let addDisplayGridCss = true;
 
-    while ((m = regex.exec(responsiveData)) !== null) {
-        let cssProp = '&';
+    while ((regexGroups = regex.exec(responsiveData)) !== null) {
+        let mediaQuery = '&';
 
-        if (m[1] !== 'mobile') {
-            cssProp = `@media ${parseMediaQueryProp(m[1])}`;
+        if (regexGroups[1] !== 'mobile') {
+            mediaQuery = `@media ${parseMediaQueryProp(regexGroups[1])}`;
         }
 
-        values.push([m[1], m[2], cssProp, addDisplayGridCss]);
+        responsiveSteps.push({
+            name: regexGroups[1],
+            columns: parseInt(regexGroups[2]),
+            mediaQuery,
+            addDisplayGridCss
+        });
+
         addDisplayGridCss = false;
     }
 
-    return values;
+    return responsiveSteps;
 };
 
+// --------------- MIXINS ------------------ //
 const colSpan = (ignore, colsResponsiveSpan) => {
     let responsiveSpanCss = {};
 
-    getCssResponsiveValues(colsResponsiveSpan).forEach(step => {
-        responsiveSpanCss[step[2]] = {
-            'grid-column-end': `span ${step[1]}`
+    getCssResponsiveSteps(colsResponsiveSpan).forEach(step => {
+        responsiveSpanCss[step.mediaQuery] = {
+            'grid-column-end': `span ${step.columns}`
         };
     });
 
@@ -86,9 +106,9 @@ const colSpan = (ignore, colsResponsiveSpan) => {
 const colStart = (ignore, colsResponsiveStart) => {
     let responsiveStartCss = {};
 
-    getCssResponsiveValues(colsResponsiveStart).forEach(step => {
-        responsiveStartCss[step[2]] = {
-            'grid-column-start': step[1]
+    getCssResponsiveSteps(colsResponsiveStart).forEach(step => {
+        responsiveStartCss[step.mediaQuery] = {
+            'grid-column-start': step.columns
         };
     });
 
@@ -103,15 +123,23 @@ const generateGrid = (ignore, responsiveGrids) => {
 
     let responsiveGridsCss = new Object();
 
-    getCssResponsiveValues(responsiveGrids).forEach(step => {
-        responsiveGridsCss[step[2]] = {
-            'grid-template-columns': getColumns(step[1]),
-            'grid-gap': grid.gaps[step[0]]
+    getCssResponsiveSteps(responsiveGrids).forEach(step => {
+        if (grid.ie11) {
+            responsiveGridsCss[step.mediaQuery] = ie11Fallback.generateCss(
+                step,
+                grid.gaps[step.name]
+            );
+        }
+
+        responsiveGridsCss[step.mediaQuery] = {
+            ...responsiveGridsCss[step.mediaQuery],
+            'grid-template-columns': getColumns(step.columns),
+            'grid-gap': grid.gaps[step.name]
         };
 
-        if (step[3]) {
-            responsiveGridsCss[step[2]] = {
-                ...responsiveGridsCss[step[2]],
+        if (step.addDisplayGridCss) {
+            responsiveGridsCss[step.mediaQuery] = {
+                ...responsiveGridsCss[step.mediaQuery],
                 display: 'grid',
                 width: '100%'
             };
@@ -129,4 +157,15 @@ const spanAll = ignore => {
     };
 };
 
-export {customConfig, generateGrid, colStart, colSpan, spanAll};
+module.exports = {
+    customConfig,
+    generateGrid,
+    colStart,
+    colSpan,
+    spanAll,
+    __private__: {
+        getColumns,
+        parseMediaQueryProp,
+        getCssResponsiveSteps
+    }
+};
