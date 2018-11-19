@@ -13,22 +13,26 @@ const generateCss = (step, stepGap) => {
     stepGap = parseIntGapSize(stepGap);
 
     for (let j = 1; j <= step.columns; j++) {
-        ie11ColumnsCss['> *'] = {
-            'margin-left': stepGap.x / 2,
-            'margin-right': stepGap.x / 2
+        ie11ColumnsCss[`> *:nth-child(${j})`] = {
+            '-ms-grid-column': j + ' '
         };
     }
 
-    ie11ColumnsCss[`*:first-child`] = {
+    ie11ColumnsCss['> *'] = {
+        'margin-left': stepGap.x / 2,
+        'margin-right': stepGap.x / 2
+    };
+
+    ie11ColumnsCss[`> *:first-child`] = {
         'margin-left': 0
     };
 
-    ie11ColumnsCss[`*:last-child`] = {
+    ie11ColumnsCss[`> *:last-child`] = {
         'margin-right': 0
     };
 
     return {
-        '@media all and (-ms-high-contrast: none), (-ms-high-contrast: active)': {
+        ':global(.cssgridlegacy) &': {
             ...ie11ColumnsCss
         }
     };
