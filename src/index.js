@@ -1,12 +1,19 @@
-import { colSpan, colStart, customConfig, generateGrid, spanAll } from './grids';
+import {
+	defaultOptions,
+	colSpan,
+	colStart,
+	customConfig,
+	generateGrid,
+	spanAll
+} from './grids';
 
 export default function(config) {
-    if (config) customConfig(config);
+	if (config) customConfig(defaultOptions, config);
 
-    return {
-        grid: generateGrid,
-        'col-start': colStart,
-        'col-span': colSpan,
-        'span-all': spanAll
-    };
+	return {
+		grid: generateGrid,
+		'col-start': colStart,
+		'col-span': colSpan,
+		'span-all': spanAll
+	};
 }
