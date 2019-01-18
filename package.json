@@ -1,10 +1,11 @@
 {
 	"name": "postcss-mixins-css-grid",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "A CSS Grid mixin for the PostCSS Mixins plugin.",
 	"main": "lib/index.js",
 	"scripts": {
-		"build": "babel src -d lib",
+		"clean": "rm -rf lib",
+		"build": "npm run clean & babel src -d lib --ignore __tests__",
 		"test": "jest"
 	},
 	"keywords": [
