@@ -44,10 +44,9 @@ const configNoIE11 = {
 
 //---
 test('getCoulmms - no param error', () => {
-  function getColumns() {
-    grids.__private__.getColumns();
-  }
-  expect(getColumns).toThrow('cols is empty or invalid!');
+  const getColumns = () => grids.__private__.getColumns();
+
+  expect(getColumns).toThrow('cols is empty or invalid');
 });
 
 test('getCoulmms with single column', () => {
@@ -64,10 +63,9 @@ test('getCoulmms with multiple columns', () => {
 
 //---
 test('parseMediaQueryProp - no param error', () => {
-  function parseMediaQueryProp() {
-    grids.__private__.parseMediaQueryProp();
-  }
-  expect(parseMediaQueryProp).toThrow('prop is undefined!');
+  const parseMediaQueryProp = () => grids.__private__.parseMediaQueryProp();
+
+  expect(parseMediaQueryProp).toThrow('prop is undefined');
 });
 
 test('parseMediaQueryProp - Sass variables', () => {
@@ -228,6 +226,48 @@ test('generateCss should generate the right CSS', () => {
 });
 
 test('getGrigGap should return an object with row and column gap', () => {
-    expect(grids.__private__.getGridGap(defaults.gaps.mobile)).toEqual({row: '1px'});
-    expect(grids.__private__.getGridGap(defaults.gaps.desktop)).toEqual({row: '3px', column: '10px'});
+  expect(grids.__private__.getGridGap(defaults.gaps.mobile)).toEqual({
+    row: '1px'
+  });
+  expect(grids.__private__.getGridGap(defaults.gaps.desktop)).toEqual({
+    row: '3px',
+    column: '10px'
+  });
+});
+
+test('generate grid using an existing template', () => {
+  grids.customConfig(defaults, configNoIE11);
+
+  const result = grids.generateGrid(null, 'default');
+  expect(result).toEqual({
+    '&': {
+      display: 'grid',
+      'grid-column-gap': '1px',
+      'grid-row-gap': '1px',
+      'grid-template-columns': 'repeat(6, 1fr)',
+      width: '100%'
+    },
+    '@media (--desktop)': {
+      'grid-column-gap': '10px',
+      'grid-row-gap': '3px',
+      'grid-template-columns': 'repeat(24, 1fr)'
+    },
+    '@media (--large-desktop)': {
+      'grid-column-gap': '4px',
+      'grid-row-gap': '4px',
+      'grid-template-columns': 'repeat(24, 1fr)'
+    },
+    '@media (--tablet)': {
+      'grid-column-gap': '2px',
+      'grid-row-gap': '2px',
+      'grid-template-columns': 'repeat(12, 1fr)'
+    }
+  });
+});
+
+test('should throw an error if we try to generate the grid using an unknown template', () => {
+  grids.customConfig(defaults, configNoIE11);
+
+  const result = () => grids.generateGrid(null, 'unknown_template');
+  expect(result).toThrow("template doesn't exist");
 });
