@@ -48,7 +48,7 @@ const customConfig = (def, conf) => {
 };
 
 const getColumns = cols => {
-  if (!cols) throw 'cols is empty or invalid!';
+  if (!cols) throw 'cols is empty or invalid';
 
   if (grid.presets[cols]) {
     return grid.presets[cols];
@@ -64,7 +64,7 @@ const getColumns = cols => {
 };
 
 const parseMediaQueryProp = prop => {
-  if (!prop) throw 'prop is undefined!';
+  if (!prop) throw 'prop is undefined';
 
   if (grid.parser === 'sass') return `$${prop}`;
   return `(--${prop})`;
@@ -132,8 +132,11 @@ const getGridGap = gridGap =>
   }, {});
 
 const generateGrid = (ignore, responsiveGrids) => {
-  if (!responsiveGrids.startsWith('@'))
+  if (!responsiveGrids) throw `template doesn't exist`;
+
+  if (!responsiveGrids.startsWith('@')) {
     return generateGrid('', grid.templates[responsiveGrids]);
+  }
 
   let responsiveGridsCss = new Object();
 
@@ -146,13 +149,13 @@ const generateGrid = (ignore, responsiveGrids) => {
       );
     }
 
-    const gridGap= getGridGap(grid.gaps[step.name]);
+    const gridGap = getGridGap(grid.gaps[step.name]);
 
     responsiveGridsCss[step.mediaQuery] = {
       ...responsiveGridsCss[step.mediaQuery],
-	  'grid-template-columns': getColumns(step.columns),
-	  'grid-row-gap': gridGap.row,
-	  'grid-column-gap': gridGap.column ? gridGap.column : gridGap.row
+      'grid-template-columns': getColumns(step.columns),
+      'grid-row-gap': gridGap.row,
+      'grid-column-gap': gridGap.column ? gridGap.column : gridGap.row
     };
 
     if (step.addDisplayGridCss) {
