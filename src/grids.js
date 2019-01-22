@@ -22,29 +22,15 @@ let grid = {
   },
   parser: 'css',
   ie11: false,
-  noGridClass: '.no-cssgrid'
+  ie11Exclude: ['mobile', 'tablet'],
+  noGridClass: '.no-cssgrid',
+  mobileStepName: 'mobile'
 };
 
 const defaultOptions = grid;
 
 const customConfig = (def, conf) => {
-  grid = def;
-
-  if (conf.grid) {
-    grid = {
-      gaps: { ...def.gaps, ...conf.grid.gaps },
-      presets: { ...def.presets, ...conf.grid.presets },
-      templates: { ...def.templates, ...conf.grid.templates }
-    };
-  }
-
-  grid = {
-    ...grid,
-    parser: conf.parser !== undefined ? conf.parser : def.parser,
-    ie11: conf.ie11 !== undefined ? conf.ie11 : def.ie11,
-    noGridClass:
-      conf.noGridClass !== undefined ? conf.noGridClass : def.noGridClass
-  };
+  grid = { ...def, ...conf };
 };
 
 const getColumns = cols => {
@@ -70,8 +56,17 @@ const parseMediaQueryProp = prop => {
   return `(--${prop})`;
 };
 
+const generateStepsRegex = (gridGaps) => {
+  const stepsString = Object.keys(gridGaps).reduce(function(previous, key) {
+    return `${previous}${key}|`;
+  }, '');
+
+  return new RegExp(`@(${stepsString}\\w*)\\s*([0-9-]*)`, 'gi');
+};
+
 const getCssResponsiveSteps = responsiveData => {
-  const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
+  const regex = generateStepsRegex(grid.gaps);
+
   let responsiveSteps = [];
   let regexGroups;
   let addDisplayGridCss = true;
@@ -79,7 +74,7 @@ const getCssResponsiveSteps = responsiveData => {
   while ((regexGroups = regex.exec(responsiveData)) !== null) {
     let mediaQuery = '&';
 
-    if (regexGroups[1] !== 'mobile') {
+    if (regexGroups[1] !== grid.mobileStepName) {
       mediaQuery = `@media ${parseMediaQueryProp(regexGroups[1])}`;
     }
 
@@ -124,12 +119,15 @@ const colStart = (ignore, colsResponsiveStart) => {
     ...responsiveStartCss
   };
 };
-const getGridGap = gridGap =>
-  gridGap.split(' ').reduce((obj, str, index) => {
+const getGridGap = gridGap => {
+  if (!gridGap) throw `gridGap doesn't exist`;
+
+  return gridGap.split(' ').reduce((obj, str, index) => {
     const valueMap = { 0: 'row', 1: 'column' };
     obj[valueMap[index]] = str;
     return obj;
   }, {});
+};
 
 const generateGrid = (ignore, responsiveGrids) => {
   if (!responsiveGrids) throw `template doesn't exist`;
@@ -141,7 +139,7 @@ const generateGrid = (ignore, responsiveGrids) => {
   let responsiveGridsCss = new Object();
 
   getCssResponsiveSteps(responsiveGrids).forEach(step => {
-    if (grid.ie11) {
+    if (grid.ie11 && !grid.ie11Exclude.includes(step.name)) {
       responsiveGridsCss[step.mediaQuery] = ie11Fallback.generateCss(
         step,
         grid.gaps[step.name],
@@ -149,14 +147,20 @@ const generateGrid = (ignore, responsiveGrids) => {
       );
     }
 
-    const gridGap = getGridGap(grid.gaps[step.name]);
-
     responsiveGridsCss[step.mediaQuery] = {
       ...responsiveGridsCss[step.mediaQuery],
-      'grid-template-columns': getColumns(step.columns),
-      'grid-row-gap': gridGap.row,
-      'grid-column-gap': gridGap.column ? gridGap.column : gridGap.row
+      'grid-template-columns': getColumns(step.columns)
     };
+
+    if (grid.gaps[step.name]) {
+      const gridGap = getGridGap(grid.gaps[step.name]);
+
+      responsiveGridsCss[step.mediaQuery] = {
+        ...responsiveGridsCss[step.mediaQuery],
+        'grid-row-gap': gridGap.row,
+        'grid-column-gap': gridGap.column ? gridGap.column : gridGap.row
+      };
+    }
 
     if (step.addDisplayGridCss) {
       responsiveGridsCss[step.mediaQuery] = {
@@ -189,6 +193,7 @@ module.exports = {
     getColumns,
     parseMediaQueryProp,
     getCssResponsiveSteps,
-    getGridGap
+    getGridGap,
+    generateStepsRegex
   }
 };
