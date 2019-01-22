@@ -56,8 +56,18 @@ const parseMediaQueryProp = prop => {
   return `(--${prop})`;
 };
 
+const generateStepsRegex = () => {
+  const stepsString = Object.keys(grid.gaps).reduce(function(previous, key) {
+    return `${previous}${key}|`;
+  }, '');
+
+  return new RegExp(`@(${stepsString}\\w*)\\s*([0-9-]*)`, 'gi');
+};
+
 const getCssResponsiveSteps = responsiveData => {
-  const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
+  //const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
+  const regex = generateStepsRegex();
+
   let responsiveSteps = [];
   let regexGroups;
   let addDisplayGridCss = true;
@@ -184,6 +194,7 @@ module.exports = {
     getColumns,
     parseMediaQueryProp,
     getCssResponsiveSteps,
-    getGridGap
+    getGridGap,
+    generateStepsRegex
   }
 };

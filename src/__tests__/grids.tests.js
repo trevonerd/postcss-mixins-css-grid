@@ -43,6 +43,16 @@ const configNoIE11 = {
   ie11: false
 };
 
+const configCustomGaps = {
+  gaps: {
+    phone: '10px',
+    desktop: '32px',
+    wide: '10px 36p'
+  },
+  mobileStepName: 'phone',
+  ie11Exclude: ['phone', 'tablet']
+};
+
 //---
 describe('getColums', () => {
   test('getCoulmms - no param error', () => {
@@ -219,6 +229,11 @@ describe('small functions', () => {
       }
     });
   });
+
+  // test('generateStepsRegex should return the right steps regex', () => {
+  //   let result = grids.__private__.generateStepsRegex();
+  //   expect(result).toBe(32);
+  // });
 });
 
 //---
@@ -277,6 +292,96 @@ describe('Generate the grid', () => {
         'grid-template-columns': 'repeat(12, 1fr)'
       },
       '@media (--tablet)': { 'grid-template-columns': 'repeat(12, 1fr)' }
+    });
+  });
+
+  test('generate custom grid without IE11 fallback', () => {
+    grids.customConfig(defaults, { ...configNoIE11, ...configCustomGaps });
+    const result = grids.generateGrid(
+      null,
+      '@phone 6 @tablet 12 @desktop 12 @wide 12'
+    );
+    expect(result).toEqual({
+      '&': {
+        display: 'grid',
+        'grid-column-gap': '10px',
+        'grid-row-gap': '10px',
+        'grid-template-columns': 'repeat(6, 1fr)',
+        width: '100%'
+      },
+      '@media (--desktop)': {
+        'grid-column-gap': '32px',
+        'grid-row-gap': '32px',
+        'grid-template-columns': 'repeat(12, 1fr)'
+      },
+      '@media (--tablet)': { 'grid-template-columns': 'repeat(12, 1fr)' },
+      '@media (--wide)': {
+        'grid-column-gap': '36p',
+        'grid-row-gap': '10px',
+        'grid-template-columns': 'repeat(12, 1fr)'
+      }
+    });
+  });
+
+  test('generate custom grid with IE11 fallback', () => {
+    grids.customConfig(defaults, { ...configIE11, ...configCustomGaps });
+    const result = grids.generateGrid(
+      null,
+      '@phone 6 @tablet 12 @desktop 12 @wide 12'
+    );
+    expect(result).toEqual({
+      '&': {
+        display: 'grid',
+        'grid-column-gap': '10px',
+        'grid-row-gap': '10px',
+        'grid-template-columns': 'repeat(6, 1fr)',
+        width: '100%'
+      },
+      '@media (--desktop)': {
+        ':global(.no-cssgrid) &': {
+          '> *': { 'margin-left': 16, 'margin-right': 16 },
+          '> *:first-child': { 'margin-left': 0 },
+          '> *:last-child': { 'margin-right': 0 },
+          '> *:nth-child(1)': { '-ms-grid-column': '1 ' },
+          '> *:nth-child(10)': { '-ms-grid-column': '10 ' },
+          '> *:nth-child(11)': { '-ms-grid-column': '11 ' },
+          '> *:nth-child(12)': { '-ms-grid-column': '12 ' },
+          '> *:nth-child(2)': { '-ms-grid-column': '2 ' },
+          '> *:nth-child(3)': { '-ms-grid-column': '3 ' },
+          '> *:nth-child(4)': { '-ms-grid-column': '4 ' },
+          '> *:nth-child(5)': { '-ms-grid-column': '5 ' },
+          '> *:nth-child(6)': { '-ms-grid-column': '6 ' },
+          '> *:nth-child(7)': { '-ms-grid-column': '7 ' },
+          '> *:nth-child(8)': { '-ms-grid-column': '8 ' },
+          '> *:nth-child(9)': { '-ms-grid-column': '9 ' }
+        },
+        'grid-column-gap': '32px',
+        'grid-row-gap': '32px',
+        'grid-template-columns': 'repeat(12, 1fr)'
+      },
+      '@media (--tablet)': { 'grid-template-columns': 'repeat(12, 1fr)' },
+      '@media (--wide)': {
+        ':global(.no-cssgrid) &': {
+          '> *': { 'margin-left': 18, 'margin-right': 18 },
+          '> *:first-child': { 'margin-left': 0 },
+          '> *:last-child': { 'margin-right': 0 },
+          '> *:nth-child(1)': { '-ms-grid-column': '1 ' },
+          '> *:nth-child(10)': { '-ms-grid-column': '10 ' },
+          '> *:nth-child(11)': { '-ms-grid-column': '11 ' },
+          '> *:nth-child(12)': { '-ms-grid-column': '12 ' },
+          '> *:nth-child(2)': { '-ms-grid-column': '2 ' },
+          '> *:nth-child(3)': { '-ms-grid-column': '3 ' },
+          '> *:nth-child(4)': { '-ms-grid-column': '4 ' },
+          '> *:nth-child(5)': { '-ms-grid-column': '5 ' },
+          '> *:nth-child(6)': { '-ms-grid-column': '6 ' },
+          '> *:nth-child(7)': { '-ms-grid-column': '7 ' },
+          '> *:nth-child(8)': { '-ms-grid-column': '8 ' },
+          '> *:nth-child(9)': { '-ms-grid-column': '9 ' }
+        },
+        'grid-column-gap': '36p',
+        'grid-row-gap': '10px',
+        'grid-template-columns': 'repeat(12, 1fr)'
+      }
     });
   });
 });
