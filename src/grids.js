@@ -65,7 +65,6 @@ const generateStepsRegex = (gridGaps) => {
 };
 
 const getCssResponsiveSteps = responsiveData => {
-  //const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
   const regex = generateStepsRegex(grid.gaps);
 
   let responsiveSteps = [];
