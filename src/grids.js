@@ -56,8 +56,8 @@ const parseMediaQueryProp = prop => {
   return `(--${prop})`;
 };
 
-const generateStepsRegex = () => {
-  const stepsString = Object.keys(grid.gaps).reduce(function(previous, key) {
+const generateStepsRegex = (gridGaps) => {
+  const stepsString = Object.keys(gridGaps).reduce(function(previous, key) {
     return `${previous}${key}|`;
   }, '');
 
@@ -66,7 +66,7 @@ const generateStepsRegex = () => {
 
 const getCssResponsiveSteps = responsiveData => {
   //const regex = /@(mobile|tablet|desktop|large-desktop\w*)\s*([0-9-]*)/gi;
-  const regex = generateStepsRegex();
+  const regex = generateStepsRegex(grid.gaps);
 
   let responsiveSteps = [];
   let regexGroups;

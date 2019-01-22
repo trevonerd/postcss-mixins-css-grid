@@ -62,13 +62,13 @@ describe('getColums', () => {
   });
 
   test('getCoulmms with single column', () => {
-    let result = grids.__private__.getColumns(6);
+    const result = grids.__private__.getColumns(6);
 
     expect(result).toBe('repeat(6, 1fr)');
   });
 
   test('getCoulmms with multiple columns', () => {
-    let result = grids.__private__.getColumns('5 10 2 4');
+    const result = grids.__private__.getColumns('5 10 2 4');
 
     expect(result).toBe('5fr 10fr 2fr 4fr');
   });
@@ -230,10 +230,13 @@ describe('small functions', () => {
     });
   });
 
-  // test('generateStepsRegex should return the right steps regex', () => {
-  //   let result = grids.__private__.generateStepsRegex();
-  //   expect(result).toBe(32);
-  // });
+  test('generateStepsRegex should return the right steps regex', () => {
+    const regex = grids.__private__.generateStepsRegex(defaults.gaps);
+    const mixinParams = '@mobile 1 @tablet 1 @desktop 3';
+    expect(regex.exec(mixinParams)[1]).toBe('mobile');
+    expect(regex.exec(mixinParams)[1]).toBe('tablet');
+    expect(regex.exec(mixinParams)[1]).toBe('desktop');
+  });
 });
 
 //---
