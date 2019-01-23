@@ -53,6 +53,12 @@ const configCustomGaps = {
   ie11Exclude: ['phone', 'tablet']
 };
 
+const configCustomTemplates = {
+  templates: {
+    '1-2': '@mobile 1 @tablet 2',
+    '1-3': '@mobile 1 @tablet 3 @desktop 4'
+  }
+};
 //---
 describe('getColums', () => {
   test('getCoulmms - no param error', () => {
@@ -196,6 +202,39 @@ describe('templates', () => {
 
     const result = () => grids.generateGrid(null, 'unknown_template');
     expect(result).toThrow("template doesn't exist");
+  });
+
+  test('custom templates', () => {
+    grids.customConfig(defaults, { ...configNoIE11, ...configCustomTemplates });
+
+    let result = grids.generateGrid(null, '1-2');
+    expect(result).toEqual({
+      '&': {
+        display: 'grid',
+        'grid-column-gap': '1px',
+        'grid-row-gap': '1px',
+        'grid-template-columns': '1fr',
+        width: '100%'
+      },
+      '@media (--tablet)': { 'grid-template-columns': 'repeat(2, 1fr)' }
+    });
+
+    result = grids.generateGrid(null, '1-3');
+    expect(result).toEqual({
+      '&': {
+        display: 'grid',
+        'grid-column-gap': '1px',
+        'grid-row-gap': '1px',
+        'grid-template-columns': '1fr',
+        width: '100%'
+      },
+      '@media (--desktop)': {
+        'grid-column-gap': '10px',
+        'grid-row-gap': '3px',
+        'grid-template-columns': 'repeat(4, 1fr)'
+      },
+      '@media (--tablet)': { 'grid-template-columns': 'repeat(3, 1fr)' }
+    });
   });
 });
 
