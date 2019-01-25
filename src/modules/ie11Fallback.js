@@ -9,6 +9,7 @@ const parseIntGapSize = gap => {
 
 const generateCss = (step, stepGap, noCssClass) => {
   let ie11ColumnsCss = {};
+
   if (stepGap) {
     const stepGapObj = parseIntGapSize(stepGap);
 
@@ -17,14 +18,9 @@ const generateCss = (step, stepGap, noCssClass) => {
     ie11ColumnsCss[`> *`] = {
       float: 'left',
       'margin-bottom': `${stepGapObj.row}px`,
+      'margin-right': `${stepGapObj.column}px`,
       width: `calc((100% - ${gapWidth}px) / ${step.columns})`
     };
-
-    for (let j = 1; j <= step.columns - 1; j++) {
-      ie11ColumnsCss[`> *:nth-of-type(${j}n)`] = {
-        'margin-right': `${stepGapObj.column}px`
-      };
-    }
 
     ie11ColumnsCss[`> *:nth-of-type(${step.columns}n)`] = {
       'margin-right': `0`
@@ -36,7 +32,7 @@ const generateCss = (step, stepGap, noCssClass) => {
     };
   }
 
-  var noGridCss = {};
+  const noGridCss = {};
   noGridCss[`${noCssClass} &`] = { ...ie11ColumnsCss };
 
   return { ...noGridCss };

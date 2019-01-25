@@ -252,9 +252,9 @@ describe('IE11 GenerateCSS', () => {
         '> *': {
           float: 'left',
           'margin-bottom': '10px',
+          'margin-right': '32px',
           width: 'calc((100% - 32px) / 2)'
         },
-        '> *:nth-of-type(1n)': { 'margin-right': '32px' },
         '> *:nth-of-type(2n)': { 'margin-right': '0' }
       }
     });
@@ -327,20 +327,10 @@ describe('Generate the grid', () => {
           '> *': {
             float: 'left',
             'margin-bottom': '3px',
+            'margin-right': '10px',
             width: 'calc((100% - 110px) / 12)'
           },
-          '> *:nth-of-type(10n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(11n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(12n)': { 'margin-right': '0' },
-          '> *:nth-of-type(1n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(2n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(3n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(4n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(5n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(6n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(7n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(8n)': { 'margin-right': '10px' },
-          '> *:nth-of-type(9n)': { 'margin-right': '10px' }
+          '> *:nth-of-type(12n)': { 'margin-right': '0' }
         },
         'grid-column-gap': '10px',
         'grid-row-gap': '3px',
@@ -397,20 +387,10 @@ describe('Generate the grid', () => {
           '> *': {
             float: 'left',
             'margin-bottom': '32px',
+            'margin-right': '32px',
             width: 'calc((100% - 352px) / 12)'
           },
-          '> *:nth-of-type(10n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(11n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(12n)': { 'margin-right': '0' },
-          '> *:nth-of-type(1n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(2n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(3n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(4n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(5n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(6n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(7n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(8n)': { 'margin-right': '32px' },
-          '> *:nth-of-type(9n)': { 'margin-right': '32px' }
+          '> *:nth-of-type(12n)': { 'margin-right': '0' }
         },
         'grid-column-gap': '32px',
         'grid-row-gap': '32px',
@@ -422,20 +402,10 @@ describe('Generate the grid', () => {
           '> *': {
             float: 'left',
             'margin-bottom': '10px',
+            'margin-right': '36px',
             width: 'calc((100% - 396px) / 12)'
           },
-          '> *:nth-of-type(10n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(11n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(12n)': { 'margin-right': '0' },
-          '> *:nth-of-type(1n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(2n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(3n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(4n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(5n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(6n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(7n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(8n)': { 'margin-right': '36px' },
-          '> *:nth-of-type(9n)': { 'margin-right': '36px' }
+          '> *:nth-of-type(12n)': { 'margin-right': '0' }
         },
         'grid-column-gap': '36p',
         'grid-row-gap': '10px',
