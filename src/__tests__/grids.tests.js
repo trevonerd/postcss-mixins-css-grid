@@ -259,7 +259,7 @@ describe('small functions', () => {
 
     const result = ie11Fallback.generateCss(step, gap, noCssClass);
     expect(result).toEqual({
-      ':global(.no-cssgrid) &': {
+      '.no-cssgrid &': {
         '> *': { 'margin-left': 16, 'margin-right': 16 },
         '> *:first-child': { 'margin-left': 0 },
         '> *:last-child': { 'margin-right': 0 },
@@ -312,7 +312,7 @@ describe('Generate the grid', () => {
         width: '100%'
       },
       '@media (--desktop)': {
-        ':global(.no-cssgrid) &': {
+        '.no-cssgrid &': {
           '> *': { 'margin-left': 5, 'margin-right': 5 },
           '> *:first-child': { 'margin-left': 0 },
           '> *:last-child': { 'margin-right': 0 },
@@ -380,7 +380,7 @@ describe('Generate the grid', () => {
         width: '100%'
       },
       '@media (--desktop)': {
-        ':global(.no-cssgrid) &': {
+        '.no-cssgrid &': {
           '> *': { 'margin-left': 16, 'margin-right': 16 },
           '> *:first-child': { 'margin-left': 0 },
           '> *:last-child': { 'margin-right': 0 },
@@ -403,7 +403,7 @@ describe('Generate the grid', () => {
       },
       '@media (--tablet)': { 'grid-template-columns': 'repeat(12, 1fr)' },
       '@media (--wide)': {
-        ':global(.no-cssgrid) &': {
+        '.no-cssgrid &': {
           '> *': { 'margin-left': 18, 'margin-right': 18 },
           '> *:first-child': { 'margin-left': 0 },
           '> *:last-child': { 'margin-right': 0 },
