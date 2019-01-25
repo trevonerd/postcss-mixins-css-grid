@@ -238,35 +238,46 @@ describe('templates', () => {
   });
 });
 
+describe('IE11 GenerateCSS', () => {
+  const step = {
+    columns: 2
+  };
+  const gap = '10px 32px';
+  const noCssClass = '.no-cssgrid';
+
+  test('should generate the right CSS with grid gap', () => {
+    const result = ie11Fallback.generateCss(step, gap, noCssClass);
+    expect(result).toEqual({
+      '.no-cssgrid &': {
+        '> *': {
+          float: 'left',
+          'margin-bottom': '10px',
+          width: 'calc((100% - 32px) / 2)'
+        },
+        '> *:nth-of-type(1n)': { 'margin-right': '32px' },
+        '> *:nth-of-type(2n)': { 'margin-right': '0' }
+      }
+    });
+  });
+
+  test('should generate the right CSS without grid gap', () => {
+    const result = ie11Fallback.generateCss(step, null, noCssClass);
+    expect(result).toEqual({
+      '.no-cssgrid &': { '> *': { float: 'left', width: 'calc((100% / 2)' } }
+    });
+  });
+});
+
 //---
 describe('small functions', () => {
   test('parseIntGapSize should create an object', () => {
     let result = ie11Fallback.__private__.parseIntGapSize('10px 32px');
-    expect(result.x).toBe(32);
-    expect(result.y).toBe(10);
+    expect(result.column).toBe(32);
+    expect(result.row).toBe(10);
 
     result = ie11Fallback.__private__.parseIntGapSize('10px');
-    expect(result.x).toBe(10);
-    expect(result.y).toBe(10);
-  });
-
-  test('generateCss should generate the right CSS', () => {
-    const step = {
-      columns: 2
-    };
-    const gap = '10px 32px';
-    const noCssClass = '.no-cssgrid';
-
-    const result = ie11Fallback.generateCss(step, gap, noCssClass);
-    expect(result).toEqual({
-      '.no-cssgrid &': {
-        '> *': { 'margin-left': 16, 'margin-right': 16 },
-        '> *:first-child': { 'margin-left': 0 },
-        '> *:last-child': { 'margin-right': 0 },
-        '> *:nth-child(1)': { '-ms-grid-column': '1 ' },
-        '> *:nth-child(2)': { '-ms-grid-column': '2 ' }
-      }
-    });
+    expect(result.column).toBe(10);
+    expect(result.row).toBe(10);
   });
 
   test('generateStepsRegex should return the right steps regex', () => {
@@ -313,21 +324,23 @@ describe('Generate the grid', () => {
       },
       '@media (--desktop)': {
         '.no-cssgrid &': {
-          '> *': { 'margin-left': 5, 'margin-right': 5 },
-          '> *:first-child': { 'margin-left': 0 },
-          '> *:last-child': { 'margin-right': 0 },
-          '> *:nth-child(1)': { '-ms-grid-column': '1 ' },
-          '> *:nth-child(10)': { '-ms-grid-column': '10 ' },
-          '> *:nth-child(11)': { '-ms-grid-column': '11 ' },
-          '> *:nth-child(12)': { '-ms-grid-column': '12 ' },
-          '> *:nth-child(2)': { '-ms-grid-column': '2 ' },
-          '> *:nth-child(3)': { '-ms-grid-column': '3 ' },
-          '> *:nth-child(4)': { '-ms-grid-column': '4 ' },
-          '> *:nth-child(5)': { '-ms-grid-column': '5 ' },
-          '> *:nth-child(6)': { '-ms-grid-column': '6 ' },
-          '> *:nth-child(7)': { '-ms-grid-column': '7 ' },
-          '> *:nth-child(8)': { '-ms-grid-column': '8 ' },
-          '> *:nth-child(9)': { '-ms-grid-column': '9 ' }
+          '> *': {
+            float: 'left',
+            'margin-bottom': '3px',
+            width: 'calc((100% - 110px) / 12)'
+          },
+          '> *:nth-of-type(10n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(11n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(12n)': { 'margin-right': '0' },
+          '> *:nth-of-type(1n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(2n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(3n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(4n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(5n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(6n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(7n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(8n)': { 'margin-right': '10px' },
+          '> *:nth-of-type(9n)': { 'margin-right': '10px' }
         },
         'grid-column-gap': '10px',
         'grid-row-gap': '3px',
@@ -381,21 +394,23 @@ describe('Generate the grid', () => {
       },
       '@media (--desktop)': {
         '.no-cssgrid &': {
-          '> *': { 'margin-left': 16, 'margin-right': 16 },
-          '> *:first-child': { 'margin-left': 0 },
-          '> *:last-child': { 'margin-right': 0 },
-          '> *:nth-child(1)': { '-ms-grid-column': '1 ' },
-          '> *:nth-child(10)': { '-ms-grid-column': '10 ' },
-          '> *:nth-child(11)': { '-ms-grid-column': '11 ' },
-          '> *:nth-child(12)': { '-ms-grid-column': '12 ' },
-          '> *:nth-child(2)': { '-ms-grid-column': '2 ' },
-          '> *:nth-child(3)': { '-ms-grid-column': '3 ' },
-          '> *:nth-child(4)': { '-ms-grid-column': '4 ' },
-          '> *:nth-child(5)': { '-ms-grid-column': '5 ' },
-          '> *:nth-child(6)': { '-ms-grid-column': '6 ' },
-          '> *:nth-child(7)': { '-ms-grid-column': '7 ' },
-          '> *:nth-child(8)': { '-ms-grid-column': '8 ' },
-          '> *:nth-child(9)': { '-ms-grid-column': '9 ' }
+          '> *': {
+            float: 'left',
+            'margin-bottom': '32px',
+            width: 'calc((100% - 352px) / 12)'
+          },
+          '> *:nth-of-type(10n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(11n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(12n)': { 'margin-right': '0' },
+          '> *:nth-of-type(1n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(2n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(3n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(4n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(5n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(6n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(7n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(8n)': { 'margin-right': '32px' },
+          '> *:nth-of-type(9n)': { 'margin-right': '32px' }
         },
         'grid-column-gap': '32px',
         'grid-row-gap': '32px',
@@ -404,21 +419,23 @@ describe('Generate the grid', () => {
       '@media (--tablet)': { 'grid-template-columns': 'repeat(12, 1fr)' },
       '@media (--wide)': {
         '.no-cssgrid &': {
-          '> *': { 'margin-left': 18, 'margin-right': 18 },
-          '> *:first-child': { 'margin-left': 0 },
-          '> *:last-child': { 'margin-right': 0 },
-          '> *:nth-child(1)': { '-ms-grid-column': '1 ' },
-          '> *:nth-child(10)': { '-ms-grid-column': '10 ' },
-          '> *:nth-child(11)': { '-ms-grid-column': '11 ' },
-          '> *:nth-child(12)': { '-ms-grid-column': '12 ' },
-          '> *:nth-child(2)': { '-ms-grid-column': '2 ' },
-          '> *:nth-child(3)': { '-ms-grid-column': '3 ' },
-          '> *:nth-child(4)': { '-ms-grid-column': '4 ' },
-          '> *:nth-child(5)': { '-ms-grid-column': '5 ' },
-          '> *:nth-child(6)': { '-ms-grid-column': '6 ' },
-          '> *:nth-child(7)': { '-ms-grid-column': '7 ' },
-          '> *:nth-child(8)': { '-ms-grid-column': '8 ' },
-          '> *:nth-child(9)': { '-ms-grid-column': '9 ' }
+          '> *': {
+            float: 'left',
+            'margin-bottom': '10px',
+            width: 'calc((100% - 396px) / 12)'
+          },
+          '> *:nth-of-type(10n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(11n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(12n)': { 'margin-right': '0' },
+          '> *:nth-of-type(1n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(2n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(3n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(4n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(5n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(6n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(7n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(8n)': { 'margin-right': '36px' },
+          '> *:nth-of-type(9n)': { 'margin-right': '36px' }
         },
         'grid-column-gap': '36p',
         'grid-row-gap': '10px',
