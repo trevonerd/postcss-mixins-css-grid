@@ -2,34 +2,37 @@ const parseIntGapSize = gap => {
   const values = gap.split(' ');
 
   return {
-    x: values[1] ? parseInt(values[1]) : parseInt(values[0]),
-    y: parseInt(values[0])
+    column: values[1] ? parseInt(values[1]) : parseInt(values[0]),
+    row: parseInt(values[0])
   };
 };
 
 const generateCss = (step, stepGap, noCssClass) => {
   let ie11ColumnsCss = {};
-
-  for (let j = 1; j <= step.columns; j++) {
-    ie11ColumnsCss[`> *:nth-child(${j})`] = {
-      '-ms-grid-column': j + ' '
-    };
-  }
-
   if (stepGap) {
-    stepGap = parseIntGapSize(stepGap);
+    const stepGapObj = parseIntGapSize(stepGap);
 
-    ie11ColumnsCss['> *'] = {
-      'margin-left': stepGap.x / 2,
-      'margin-right': stepGap.x / 2
+    const gapWidth = (step.columns - 1) * stepGapObj.column;
+
+    ie11ColumnsCss[`> *`] = {
+      float: 'left',
+      'margin-bottom': `${stepGapObj.row}px`,
+      width: `calc((100% - ${gapWidth}px) / ${step.columns})`
     };
 
-    ie11ColumnsCss[`> *:first-child`] = {
-      'margin-left': 0
-    };
+    for (let j = 1; j <= step.columns - 1; j++) {
+      ie11ColumnsCss[`> *:nth-of-type(${j}n)`] = {
+        'margin-right': `${stepGapObj.column}px`
+      };
+    }
 
-    ie11ColumnsCss[`> *:last-child`] = {
-      'margin-right': 0
+    ie11ColumnsCss[`> *:nth-of-type(${step.columns}n)`] = {
+      'margin-right': `0`
+    };
+  } else {
+    ie11ColumnsCss[`> *`] = {
+      float: 'left',
+      width: `calc((100% / ${step.columns})`
     };
   }
 
