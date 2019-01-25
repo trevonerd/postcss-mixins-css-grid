@@ -34,7 +34,7 @@ const generateCss = (step, stepGap, noCssClass) => {
   }
 
   var noGridCss = {};
-  noGridCss[`:global(${noCssClass}) &`] = { ...ie11ColumnsCss };
+  noGridCss[`${noCssClass} &`] = { ...ie11ColumnsCss };
 
   return { ...noGridCss };
 };
