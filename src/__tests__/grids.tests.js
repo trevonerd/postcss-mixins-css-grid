@@ -250,12 +250,12 @@ describe('IE11 GenerateCSS', () => {
     expect(result).toEqual({
       '.no-cssgrid &': {
         '> *': {
-          float: 'left',
           'margin-bottom': '10px',
           'margin-right': '32px',
           width: 'calc((100% - 32px) / 2)'
         },
-        '> *:nth-of-type(2n)': { 'margin-right': '0' }
+        '> *:nth-child(2n)': { 'margin-right': '0' },
+        display: 'flex'
       }
     });
   });
@@ -263,7 +263,10 @@ describe('IE11 GenerateCSS', () => {
   test('should generate the right CSS without grid gap', () => {
     const result = ie11Fallback.generateCss(step, null, noCssClass);
     expect(result).toEqual({
-      '.no-cssgrid &': { '> *': { float: 'left', width: 'calc((100% / 2)' } }
+      '.no-cssgrid &': {
+        '> *': { float: 'left', width: 'calc((100% / 2)' },
+        display: 'flex'
+      }
     });
   });
 });
@@ -325,12 +328,12 @@ describe('Generate the grid', () => {
       '@media (--desktop)': {
         '.no-cssgrid &': {
           '> *': {
-            float: 'left',
             'margin-bottom': '3px',
             'margin-right': '10px',
             width: 'calc((100% - 110px) / 12)'
           },
-          '> *:nth-of-type(12n)': { 'margin-right': '0' }
+          '> *:nth-child(12n)': { 'margin-right': '0' },
+          display: 'flex'
         },
         'grid-column-gap': '10px',
         'grid-row-gap': '3px',
@@ -385,12 +388,12 @@ describe('Generate the grid', () => {
       '@media (--desktop)': {
         '.no-cssgrid &': {
           '> *': {
-            float: 'left',
             'margin-bottom': '32px',
             'margin-right': '32px',
             width: 'calc((100% - 352px) / 12)'
           },
-          '> *:nth-of-type(12n)': { 'margin-right': '0' }
+          '> *:nth-child(12n)': { 'margin-right': '0' },
+          display: 'flex'
         },
         'grid-column-gap': '32px',
         'grid-row-gap': '32px',
@@ -400,17 +403,42 @@ describe('Generate the grid', () => {
       '@media (--wide)': {
         '.no-cssgrid &': {
           '> *': {
-            float: 'left',
             'margin-bottom': '10px',
             'margin-right': '36px',
             width: 'calc((100% - 396px) / 12)'
           },
-          '> *:nth-of-type(12n)': { 'margin-right': '0' }
+          '> *:nth-child(12n)': { 'margin-right': '0' },
+          display: 'flex'
         },
         'grid-column-gap': '36p',
         'grid-row-gap': '10px',
         'grid-template-columns': 'repeat(12, 1fr)'
       }
+    });
+  });
+});
+
+describe('Generate colSpan', () => {
+  test('generate colSpan without IE11 fallback', () => {
+    grids.customConfig(defaults, configNoIE11);
+
+    const result = grids.colSpan(null, '@mobile 6 @desktop 12');
+    expect(result).toEqual({
+      '&': { 'grid-column-end': 'span 6' },
+      '@media (--desktop)': { 'grid-column-end': 'span 12' }
+    });
+  });
+
+  test('generate colSpan with IE11 fallback', () => {
+    grids.customConfig(defaults, configIE11);
+    const result = grids.colSpan(null, '@mobile 6 @tablet 12 @desktop 12');
+    expect(result).toEqual({
+      '&': { 'grid-column-end': 'span 6' },
+      '@media (--desktop)': {
+        '.no-cssgrid &': { 'flex-grow': 12 },
+        'grid-column-end': 'span 12'
+      },
+      '@media (--tablet)': { 'grid-column-end': 'span 12' }
     });
   });
 });

@@ -1,6 +1,6 @@
 {
 	"name": "postcss-mixins-css-grid",
-	"version": "3.2.1",
+	"version": "4.0.0",
 	"description": "A CSS Grid mixin for the PostCSS Mixins plugin.",
 	"main": "lib/index.js",
 	"scripts": {
