@@ -56,7 +56,7 @@ const parseMediaQueryProp = prop => {
   return `(--${prop})`;
 };
 
-const generateStepsRegex = (gridGaps) => {
+const generateStepsRegex = gridGaps => {
   const stepsString = Object.keys(gridGaps).reduce(function(previous, key) {
     return `${previous}${key}|`;
   }, '');
@@ -90,13 +90,30 @@ const getCssResponsiveSteps = responsiveData => {
 
   return responsiveSteps;
 };
+const getGridGap = gridGap => {
+  if (!gridGap) throw `gridGap doesn't exist`;
+
+  return gridGap.split(' ').reduce((obj, str, index) => {
+    const valueMap = { 0: 'row', 1: 'column' };
+    obj[valueMap[index]] = str;
+    return obj;
+  }, {});
+};
 
 // --------------- MIXINS ------------------ //
 const colSpan = (ignore, colsResponsiveSpan) => {
   let responsiveSpanCss = {};
 
   getCssResponsiveSteps(colsResponsiveSpan).forEach(step => {
+    if (grid.ie11 && !grid.ie11Exclude.includes(step.name)) {
+      responsiveSpanCss[step.mediaQuery] = ie11Fallback.colSpan(
+        step.columns,
+        grid.noGridClass
+      );
+    }
+
     responsiveSpanCss[step.mediaQuery] = {
+      ...responsiveSpanCss[step.mediaQuery],
       'grid-column-end': `span ${step.columns}`
     };
   });
@@ -118,15 +135,6 @@ const colStart = (ignore, colsResponsiveStart) => {
   return {
     ...responsiveStartCss
   };
-};
-const getGridGap = gridGap => {
-  if (!gridGap) throw `gridGap doesn't exist`;
-
-  return gridGap.split(' ').reduce((obj, str, index) => {
-    const valueMap = { 0: 'row', 1: 'column' };
-    obj[valueMap[index]] = str;
-    return obj;
-  }, {});
 };
 
 const generateGrid = (ignore, responsiveGrids) => {
