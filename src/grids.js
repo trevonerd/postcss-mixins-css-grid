@@ -40,8 +40,14 @@ const getColumns = cols => {
     return grid.presets[cols];
   }
 
-  const matches = cols.match(/[\w]+/g);
+  const matches = cols.toString().match(/[\w]+/g);
+
   let gridTemplate = '';
+
+  if (matches.length === 1) {
+    return `repeat(${matches}, 1fr)`;
+  }
+
   matches.forEach(col => {
     gridTemplate += col + 'fr ';
   });
@@ -61,7 +67,7 @@ const generateStepsRegex = gridGaps => {
     return `${previous}${key}|`;
   }, '');
 
-  return new RegExp(`@(${stepsString}\\w*)\\s*([0-9-]*)`, 'gi');
+  return new RegExp(`@(${stepsString}\\w*)\\s*([\\s0-9-]*)`, 'gi');
 };
 
 const getCssResponsiveSteps = responsiveData => {
@@ -80,7 +86,7 @@ const getCssResponsiveSteps = responsiveData => {
 
     responsiveSteps.push({
       name: regexGroups[1],
-      columns: parseInt(regexGroups[2]),
+      columns: regexGroups[2].trim(),
       mediaQuery,
       addDisplayGridCss
     });

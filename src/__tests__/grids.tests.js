@@ -18,7 +18,7 @@ let defaults = {
     24: 'repeat(24, 1fr)'
   },
   templates: {
-    default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24'
+    default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24',
   },
   parser: 'css',
   ie11: false,
@@ -59,12 +59,25 @@ const configCustomTemplates = {
     '1-3': '@mobile 1 @tablet 3 @desktop 4'
   }
 };
+
 //---
 describe('getColums', () => {
   test('getCoulmms - no param error', () => {
     const getColumns = () => grids.__private__.getColumns();
 
     expect(getColumns).toThrow('cols is empty or invalid');
+  });
+
+  test('getCoulmms with single column (no preset)', () => {
+    const result = grids.__private__.getColumns(5);
+
+    expect(result).toBe('repeat(5, 1fr)');
+  });
+
+  test('getCoulmms with multiple columns (no preset)', () => {
+    const result = grids.__private__.getColumns('5 10 5');
+
+    expect(result).toBe('5fr 10fr 5fr');
   });
 
   test('getCoulmms with single column', () => {
@@ -110,7 +123,7 @@ describe('getCssResponsiveSteps', () => {
     expect(result).toEqual([
       {
         addDisplayGridCss: true,
-        columns: 3,
+        columns: "3",
         mediaQuery: '&',
         name: 'mobile'
       }
@@ -124,25 +137,25 @@ describe('getCssResponsiveSteps', () => {
     expect(result).toEqual([
       {
         addDisplayGridCss: true,
-        columns: 6,
+        columns: "6",
         mediaQuery: '&',
         name: 'mobile'
       },
       {
         addDisplayGridCss: false,
-        columns: 6,
+        columns: "6",
         mediaQuery: '@media (--tablet)',
         name: 'tablet'
       },
       {
         addDisplayGridCss: false,
-        columns: 12,
+        columns: "12",
         mediaQuery: '@media (--desktop)',
         name: 'desktop'
       },
       {
         addDisplayGridCss: false,
-        columns: 24,
+        columns: "24",
         mediaQuery: '@media (--large-desktop)',
         name: 'large-desktop'
       }
@@ -435,7 +448,7 @@ describe('Generate colSpan', () => {
     expect(result).toEqual({
       '&': { 'grid-column-end': 'span 6' },
       '@media (--desktop)': {
-        '.no-cssgrid &': { 'flex-grow': 12 },
+        '.no-cssgrid &': { 'flex-grow': "12" },
         'grid-column-end': 'span 12'
       },
       '@media (--tablet)': { 'grid-column-end': 'span 12' }
