@@ -18,7 +18,7 @@ let defaults = {
     24: 'repeat(24, 1fr)'
   },
   templates: {
-    default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24',
+    default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24'
   },
   parser: 'css',
   ie11: false,
@@ -123,7 +123,7 @@ describe('getCssResponsiveSteps', () => {
     expect(result).toEqual([
       {
         addDisplayGridCss: true,
-        columns: "3",
+        columns: '3',
         mediaQuery: '&',
         name: 'mobile'
       }
@@ -137,25 +137,25 @@ describe('getCssResponsiveSteps', () => {
     expect(result).toEqual([
       {
         addDisplayGridCss: true,
-        columns: "6",
+        columns: '6',
         mediaQuery: '&',
         name: 'mobile'
       },
       {
         addDisplayGridCss: false,
-        columns: "6",
+        columns: '6',
         mediaQuery: '@media (--tablet)',
         name: 'tablet'
       },
       {
         addDisplayGridCss: false,
-        columns: "12",
+        columns: '12',
         mediaQuery: '@media (--desktop)',
         name: 'desktop'
       },
       {
         addDisplayGridCss: false,
-        columns: "24",
+        columns: '24',
         mediaQuery: '@media (--large-desktop)',
         name: 'large-desktop'
       }
@@ -268,7 +268,8 @@ describe('IE11 GenerateCSS', () => {
           width: 'calc((100% - 32px) / 2)'
         },
         '> *:nth-child(2n)': { 'margin-right': '0' },
-        display: 'flex'
+        display: 'flex',
+        'flex-wrap': 'wrap'
       }
     });
   });
@@ -278,7 +279,8 @@ describe('IE11 GenerateCSS', () => {
     expect(result).toEqual({
       '.no-cssgrid &': {
         '> *': { float: 'left', width: 'calc((100% / 2)' },
-        display: 'flex'
+        display: 'flex',
+        'flex-wrap': 'wrap'
       }
     });
   });
@@ -346,7 +348,8 @@ describe('Generate the grid', () => {
             width: 'calc((100% - 110px) / 12)'
           },
           '> *:nth-child(12n)': { 'margin-right': '0' },
-          display: 'flex'
+          display: 'flex',
+          'flex-wrap': 'wrap'
         },
         'grid-column-gap': '10px',
         'grid-row-gap': '3px',
@@ -406,7 +409,8 @@ describe('Generate the grid', () => {
             width: 'calc((100% - 352px) / 12)'
           },
           '> *:nth-child(12n)': { 'margin-right': '0' },
-          display: 'flex'
+          display: 'flex',
+          'flex-wrap': 'wrap'
         },
         'grid-column-gap': '32px',
         'grid-row-gap': '32px',
@@ -421,7 +425,8 @@ describe('Generate the grid', () => {
             width: 'calc((100% - 396px) / 12)'
           },
           '> *:nth-child(12n)': { 'margin-right': '0' },
-          display: 'flex'
+          display: 'flex',
+          'flex-wrap': 'wrap'
         },
         'grid-column-gap': '36p',
         'grid-row-gap': '10px',
@@ -448,7 +453,7 @@ describe('Generate colSpan', () => {
     expect(result).toEqual({
       '&': { 'grid-column-end': 'span 6' },
       '@media (--desktop)': {
-        '.no-cssgrid &': { 'flex-grow': "12" },
+        '.no-cssgrid &': { 'flex-grow': '12' },
         'grid-column-end': 'span 12'
       },
       '@media (--tablet)': { 'grid-column-end': 'span 12' }

@@ -11,7 +11,8 @@ const generateCss = (step, stepGap, noCssClass) => {
   let ie11ColumnsCss = {};
 
   ie11ColumnsCss = {
-    display: 'flex'
+    display: 'flex',
+    'flex-wrap': 'wrap'
   };
 
   if (stepGap) {
@@ -47,7 +48,7 @@ const colSpan = (stepColumns, noCssClass) => {
   };
 
   const noGridCss = {};
-  noGridCss[`${noCssClass} &`] = ie11Span ;
+  noGridCss[`${noCssClass} &`] = ie11Span;
 
   return { ...noGridCss };
 };
