@@ -1,31 +1,38 @@
 {
-	"name": "postcss-mixins-css-grid",
-	"version": "4.0.1",
-	"description": "A CSS Grid mixin for the PostCSS Mixins plugin.",
-	"main": "lib/index.js",
-	"scripts": {
-		"clean": "rm -rf lib",
-		"build": "npm run clean & babel src -d lib --ignore __tests__",
-		"test": "jest"
-	},
-	"keywords": [
-		"postcss",
-		"mixins",
-		"collection"
-	],
-	"author": "Marco Trevisani <marco.trevisani81@gmail.com>",
-	"license": "ISC",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/trevonerd/postcss-mixins-css-grid"
-	},
-	"devDependencies": {
-		"babel-cli": "^6.26.0",
-		"babel-core": "^6.26.3",
-		"babel-jest": "^23.6.0",
-		"babel-preset-env": "^1.7.0",
-		"babel-preset-stage-0": "^6.24.1",
-		"jest": "^23.6.0",
-		"regenerator-runtime": "^0.13.1"
-	}
+    "name": "postcss-mixins-css-grid",
+    "version": "5.0.0",
+    "description": "A CSS Grid mixin for the PostCSS mixins plugin with IE11 support.",
+    "main": "lib/index.js",
+    "watch": {
+        "build": "src/**/*.js"
+    },
+    "scripts": {
+        "clean": "rm -rf lib",
+        "build": "npm run clean & babel src -d lib --ignore __tests__",
+        "watch": "npm-watch build",
+        "test": "jest"
+    },
+    "keywords": [
+        "postcss",
+        "mixin",
+        "css grid",
+        "grid",
+        "ie11"
+    ],
+    "author": "Marco Trevisani <marco.trevisani81@gmail.com>",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/trevonerd/postcss-mixins-css-grid"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "babel-jest": "^24.8.0",
+        "jest": "^24.8.0",
+        "npm-watch": "^0.6.0",
+        "regenerator-runtime": "^0.13.3"
+    },
+    "dependencies": {}
 }
