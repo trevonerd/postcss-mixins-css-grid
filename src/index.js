@@ -4,6 +4,7 @@ import {
 	colStart,
 	customConfig,
 	generateGrid,
+	generateGridTemplateCss,
 	spanAll
 } from './grids';
 
@@ -14,6 +15,7 @@ export default function(config) {
 		grid: generateGrid,
 		'col-start': colStart,
 		'col-span': colSpan,
-		'span-all': spanAll
+		'span-all': spanAll,
+		'grid-template': generateGridTemplateCss
 	};
 }
