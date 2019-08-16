@@ -1,6 +1,6 @@
 {
     "name": "postcss-mixins-css-grid",
-    "version": "5.0.0",
+    "version": "5.0.1",
     "description": "A CSS Grid mixin for the PostCSS mixins plugin with IE11 support.",
     "main": "lib/index.js",
     "watch": {
@@ -29,8 +29,8 @@
         "@babel/cli": "^7.5.5",
         "@babel/core": "^7.5.5",
         "@babel/preset-env": "^7.5.5",
-        "babel-jest": "^24.8.0",
-        "jest": "^24.8.0",
+        "babel-jest": "^24.9.0",
+        "jest": "^24.9.0",
         "npm-watch": "^0.6.0",
         "regenerator-runtime": "^0.13.3"
     },

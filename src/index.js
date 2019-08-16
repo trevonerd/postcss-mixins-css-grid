@@ -16,6 +16,6 @@ export default function(config) {
 		'col-start': colStart,
 		'col-span': colSpan,
 		'span-all': spanAll,
-		'grid-template': generateGridTemplateCss
+		'grid-areas': generateGridTemplateCss
 	};
 }
