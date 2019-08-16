@@ -18,7 +18,6 @@ let grid = {
         24: 'repeat(24, 1fr)'
     },
     templates: {
-        asdasd: 'sd',
         default: '@mobile 6 @tablet 12 @desktop 24 @large-desktop 24'
     },
     parser: 'css',
@@ -199,21 +198,21 @@ const spanAll = ignore => {
     };
 };
 
-/* CSS GRID-TEMPLATE */
-const generateGridTemplateStepsRegex = gridGaps => {
+// --------------- CSS GRID-TEMPLATE-AREAS ------------------ //
+const generateGridTemplateAreasStepsRegex = gridGaps => {
     const stepsString = Object.keys(gridGaps).reduce(concatWithPipe, '');
 
     return new RegExp(`@(${stepsString}\\w*)\\s*([a-z" \.]*)`, 'gi');
 };
 
-const getGridTemplateColumnsCss = gridTemplate => {
+const getGridTemplateAreasColumnsCss = gridTemplate => {
     const templateColumns = gridTemplate.match(/"([a-z \.]*)"/g)[0].split(' ');
 
     return templateColumns.map(() => '1fr').join(' ');
 };
 
-const generateGridTemplateResponsiveStepsObject = responsiveData => {
-    const regex = generateGridTemplateStepsRegex(grid.gaps);
+const generateGridTemplateAreasResponsiveStepsObject = responsiveData => {
+    const regex = generateGridTemplateAreasStepsRegex(grid.gaps);
 
     let responsiveSteps = [];
     let regexGroups;
@@ -228,7 +227,7 @@ const generateGridTemplateResponsiveStepsObject = responsiveData => {
 
         const stepName = regexGroups[1];
         const gridTemplateAreas = regexGroups[2].trim();
-        const gridTemplateColumnsCss = getGridTemplateColumnsCss(gridTemplateAreas);
+        const gridTemplateColumnsCss = getGridTemplateAreasColumnsCss(gridTemplateAreas);
 
         responsiveSteps.push({
             name: stepName,
@@ -244,16 +243,16 @@ const generateGridTemplateResponsiveStepsObject = responsiveData => {
     return responsiveSteps;
 };
 
-const generateGridTemplateCss = (ignore, mixinParams) => {
+const generateGridTemplateAreasCss = (ignore, mixinParams) => {
     if (!mixinParams) throw `CSS grid mixin: wrong parameters`;
 
     if (!mixinParams.startsWith('@')) {
-        return generateGridTemplateCss(null, grid.templates[mixinParams]);
+        return generateGridTemplateAreasCss(null, grid.templates[mixinParams]);
     }
 
     let responsiveGridsCss = new Object();
 
-    generateGridTemplateResponsiveStepsObject(mixinParams).forEach(step => {
+    generateGridTemplateAreasResponsiveStepsObject(mixinParams).forEach(step => {
         responsiveGridsCss[step.mediaQuery] = {
             ...responsiveGridsCss[step.mediaQuery],
             'grid-template': `${step.template} / ${step.columns}`
@@ -297,7 +296,7 @@ module.exports = {
     defaultOptions,
     customConfig,
     generateGrid,
-    generateGridTemplateCss,
+    generateGridTemplateAreasCss,
     colStart,
     colSpan,
     spanAll,
@@ -308,8 +307,8 @@ module.exports = {
         getGridGap,
         generateStepsRegex,
         // GRID-TEMPLATE
-        generateGridTemplateStepsRegex,
-        getGridTemplateColumnsCss,
-        generateGridTemplateResponsiveStepsObject
+        generateGridTemplateAreasStepsRegex,
+        getGridTemplateAreasColumnsCss,
+        generateGridTemplateAreasResponsiveStepsObject
     }
 };

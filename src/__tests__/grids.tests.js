@@ -328,8 +328,8 @@ describe('small functions', () => {
         expect(regex3[2].trim()).toBe('3');
     });
 
-    test('generateGridTemplateStepsRegex should return the right steps regex', () => {
-        const regex = grids.__private__.generateGridTemplateStepsRegex(defaults.gaps);
+    test('generateGridTemplateAreasStepsRegex should return the right steps regex', () => {
+        const regex = grids.__private__.generateGridTemplateAreasStepsRegex(defaults.gaps);
         const mixinParams = '@mobile "a" "b" @tablet "a b" @desktop "a b"';
         const regex1 = regex.exec(mixinParams);
         const regex2 = regex.exec(mixinParams);
@@ -343,14 +343,14 @@ describe('small functions', () => {
         expect(regex3[2].trim()).toBe('"a b"');
     });
 
-    test('getGridTemplateColumnsCss should return the right numbers of 1fr depending of the columns', () => {
-        let result = grids.__private__.getGridTemplateColumnsCss('"a"');
+    test('getGridTemplateAreasColumnsCss should return the right numbers of 1fr depending of the columns', () => {
+        let result = grids.__private__.getGridTemplateAreasColumnsCss('"a"');
         expect(result).toBe('1fr');
 
-        result = grids.__private__.getGridTemplateColumnsCss('"a b c"');
+        result = grids.__private__.getGridTemplateAreasColumnsCss('"a b c"');
         expect(result).toBe('1fr 1fr 1fr');
 
-        result = grids.__private__.getGridTemplateColumnsCss('"a . c d"');
+        result = grids.__private__.getGridTemplateAreasColumnsCss('"a . c d"');
         expect(result).toBe('1fr 1fr 1fr 1fr');
     });
 });
@@ -526,7 +526,7 @@ describe('Grid Template', () => {
     test('generate css grid using grid-template (one row)', () => {
         grids.customConfig(defaults, configNoIE11);
 
-        const result = grids.generateGridTemplateCss(
+        const result = grids.generateGridTemplateAreasCss(
             null,
             '@mobile "a b" @tablet "a a b b" @desktop "a a a b"'
         );
@@ -570,7 +570,7 @@ describe('Grid Template', () => {
     test('generate css grid using grid-template (multiple rows)', () => {
         grids.customConfig(defaults, configNoIE11);
 
-        const result = grids.generateGridTemplateCss(
+        const result = grids.generateGridTemplateAreasCss(
             null,
             '@mobile "a" "b" "c" "d" @tablet "a b" "c d" @desktop "a b c d"'
         );
@@ -632,7 +632,7 @@ describe('Grid Template', () => {
     test('generate css grid using grid-template (multiple rows + empty columns)', () => {
         grids.customConfig(defaults, configNoIE11);
 
-        const result = grids.generateGridTemplateCss(null, '@mobile "a . b"');
+        const result = grids.generateGridTemplateAreasCss(null, '@mobile "a . b"');
         expect(result).toEqual({
             '&': {
                 '> *:nth-child(1)': {
