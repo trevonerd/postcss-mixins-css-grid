@@ -1,6 +1,6 @@
 {
     "name": "postcss-mixins-css-grid",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "description": "A CSS Grid mixin for the PostCSS mixins plugin with IE11 support.",
     "main": "lib/index.js",
     "watch": {
