@@ -528,7 +528,7 @@ describe('Grid Template', () => {
 
         const result = grids.generateGridTemplateAreasCss(
             null,
-            '@mobile "a1 b1" @tablet "a1 a1 b1 b1" @desktop "a1 a1 a1 b1"'
+            '@mobile "a1 b1" @tablet "a1 a1 b1 b1" @desktop "b1 a1 a1 a1"'
         );
         expect(result).toEqual({
             '&': {
@@ -553,7 +553,7 @@ describe('Grid Template', () => {
                 },
                 'grid-column-gap': '10px',
                 'grid-row-gap': '3px',
-                'grid-template': '"a1 a1 a1 b1" / 1fr 1fr 1fr 1fr'
+                'grid-template': '"b1 a1 a1 a1" / 1fr 1fr 1fr 1fr'
             },
             '@media (--tablet)': {
                 '> *:nth-child(1)': {

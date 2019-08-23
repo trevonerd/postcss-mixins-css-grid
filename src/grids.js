@@ -280,6 +280,7 @@ const generateGridTemplateAreasCss = (ignore, mixinParams) => {
             .replace(/[^A-Za-z0-9 ]/g, '') // remove all unuseful chars
             .replace(/  +/g, ' ') // no more double spaces
             .split(' ')
+            .sort()
             .filter((x, i, a) => a.indexOf(x) == i)
             .forEach((area, index) => {
                 responsiveGridsCss[step.mediaQuery][`> *:nth-child(${index + 1})`] = {
