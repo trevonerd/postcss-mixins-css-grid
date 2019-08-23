@@ -523,46 +523,46 @@ describe('Generate colSpan', () => {
 });
 
 describe('Grid Template', () => {
-    test('generate css grid using grid-template (one row)', () => {
+    test('generate css grid using grid-template (one row, area names with letters and numbers)', () => {
         grids.customConfig(defaults, configNoIE11);
 
         const result = grids.generateGridTemplateAreasCss(
             null,
-            '@mobile "a b" @tablet "a a b b" @desktop "a a a b"'
+            '@mobile "a1 b1" @tablet "a1 a1 b1 b1" @desktop "a1 a1 a1 b1"'
         );
         expect(result).toEqual({
             '&': {
                 '> *:nth-child(1)': {
-                    'grid-area': 'a'
+                    'grid-area': 'a1'
                 },
                 '> *:nth-child(2)': {
-                    'grid-area': 'b'
+                    'grid-area': 'b1'
                 },
                 display: 'grid',
                 'grid-column-gap': '1px',
                 'grid-row-gap': '1px',
-                'grid-template': '"a b" / 1fr 1fr',
+                'grid-template': '"a1 b1" / 1fr 1fr',
                 width: '100%'
             },
             '@media (--desktop)': {
                 '> *:nth-child(1)': {
-                    'grid-area': 'a'
+                    'grid-area': 'a1'
                 },
                 '> *:nth-child(2)': {
-                    'grid-area': 'b'
+                    'grid-area': 'b1'
                 },
                 'grid-column-gap': '10px',
                 'grid-row-gap': '3px',
-                'grid-template': '"a a a b" / 1fr 1fr 1fr 1fr'
+                'grid-template': '"a1 a1 a1 b1" / 1fr 1fr 1fr 1fr'
             },
             '@media (--tablet)': {
                 '> *:nth-child(1)': {
-                    'grid-area': 'a'
+                    'grid-area': 'a1'
                 },
                 '> *:nth-child(2)': {
-                    'grid-area': 'b'
+                    'grid-area': 'b1'
                 },
-                'grid-template': '"a a b b" / 1fr 1fr 1fr 1fr'
+                'grid-template': '"a1 a1 b1 b1" / 1fr 1fr 1fr 1fr'
             }
         });
     });

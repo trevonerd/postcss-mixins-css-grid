@@ -202,11 +202,11 @@ const spanAll = ignore => {
 const generateGridTemplateAreasStepsRegex = gridGaps => {
     const stepsString = Object.keys(gridGaps).reduce(concatWithPipe, '');
 
-    return new RegExp(`@(${stepsString}\\w*)\\s*([a-z" \.]*)`, 'gi');
+    return new RegExp(`@(${stepsString}\\w*)\\s*([a-z0-9" \.]*)`, 'gi');
 };
 
 const getGridTemplateAreasColumnsCss = gridTemplate => {
-    const templateColumns = gridTemplate.match(/"([a-z \.]*)"/g)[0].split(' ');
+    const templateColumns = gridTemplate.match(/"([a-z0-9 \.]*)"/g)[0].split(' ');
 
     return templateColumns.map(() => '1fr').join(' ');
 };
@@ -276,9 +276,10 @@ const generateGridTemplateAreasCss = (ignore, mixinParams) => {
             };
         }
 
-        step.template
-            .replace(/[^A-Za-z]/g, '')
-            .split('')
+        step.template = step.template
+            .replace(/[^A-Za-z0-9 ]/g, '') // remove all unuseful chars
+            .replace(/  +/g, ' ') // no more double spaces
+            .split(' ')
             .filter((x, i, a) => a.indexOf(x) == i)
             .forEach((area, index) => {
                 responsiveGridsCss[step.mediaQuery][`> *:nth-child(${index + 1})`] = {
